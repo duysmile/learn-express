@@ -1,0 +1,8 @@
+h2 List todo
+a(href="/todos/create") Create todo
+form(action="/todos")
+  input(type='text', name="q", value=q)
+  button Search
+ul
+  each todo in todos
+    li= todo.content

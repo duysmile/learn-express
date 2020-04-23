@@ -1,0 +1,13 @@
+extends ../layouts/common
+
+block main
+  h2 View book
+  a(href="/books") Back
+  form(action="/books/" + book.id, method="POST")
+    div(class="form-group")
+      label Title 
+      input(class="form-control", type="text", name="title", value=book.title)
+    div(class="form-group")
+      label Description
+      div= book.description
+    button(class="btn btn-primary") Update

@@ -1,13 +1,37 @@
 {
-  "posts": [],
-  "user": {},
-  "count": 0,
-  "todos": [
+  "books": [
     {
-      "content": "Ăn"
+      "id": "NhzeZNEKG",
+      "title": "abc",
+      "description": "Hello everyone"
     },
     {
-      "content": "Ngủ"
+      "id": "0-iJLZEna",
+      "title": "abd",
+      "description": "Hello world"
+    },
+    {
+      "id": "L23CGm9-y",
+      "title": "Duy",
+      "description": "Hỏi thời gian nhận thông tin cung hoàng đạo"
+    }
+  ],
+  "users": [
+    {
+      "id": "RVrnerYlE",
+      "name": "duy"
+    },
+    {
+      "id": "yCENSmSv_",
+      "name": "hang"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "jckaTli0s",
+      "bookId": "NhzeZNEKG",
+      "userId": "RVrnerYlE",
+      "isComplete": true
     }
   ]
 }

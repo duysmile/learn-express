@@ -1,0 +1,16 @@
+extends ../layouts/common
+
+block main
+  h2 Add transaction
+  form(action="/transactions/create", method="POST")
+    div(class="form-group")
+      label User 
+      select(class="form-control", name="user")
+        each user in users
+          option(value=user.id)= user.name
+    div(class="form-group") 
+      label Book  
+      select(class="form-control", name="book")
+        each book in books
+          option(value=book.id)= book.title
+    button(class="btn btn-primary") Add

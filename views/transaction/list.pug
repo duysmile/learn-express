@@ -1,0 +1,25 @@
+extends ../layouts/common
+
+block main
+  h2 List transactions
+  a(class="btn btn-primary mb-2", href="/transactions/create") Add new transaction
+
+  table(class="table table-bordered")
+    thead(class="thead-dark")
+      tr
+        th(scope="col") #
+        th(scope="col") Book
+        th(scope="col") User
+        th(scope="col") Complete
+        th(scope="col") Action
+    tbody
+      each transaction in transactions
+        tr
+          th(scope="row")= transaction.id
+          th(scope="row")= transaction.book
+          th(scope="row")= transaction.user
+          th(scope="row")= transaction.isComplete ? 'Completed' : 'Incompleted'
+          th(scope="row")
+            if (!transaction.isComplete)
+              a(class="btn btn-success mr-2", href="/transactions/" + transaction.id + "/complete") Complete
+            a(class="btn btn-danger", href="/transactions/" + transaction.id + "/delete") Delete

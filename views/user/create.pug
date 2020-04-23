@@ -1,0 +1,11 @@
+extends ../layouts/common
+
+block main
+  h2 Create user
+  if errors
+    each error in errors
+      .alert.alert-danger= error
+  form(action="/users/create", method="POST")
+    div(class="form-group")
+      input(class="form-control", name="name", placeholder="Name")
+    button(class="btn btn-primary") Create

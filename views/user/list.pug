@@ -1,0 +1,20 @@
+extends ../layouts/common
+
+block main
+  h2 List users
+  a(class="btn btn-primary mb-2", href="/users/create") Add new user
+  table(class="table table-bordered")
+    thead(class="thead-dark")
+      tr
+        th(scope="col") #
+        th(scope="col") Name
+        th(scope="col") Action
+    tbody
+      each user in users
+        tr
+          th(scope="row")= user.id
+          th(scope="row")= user.name
+          th(scope="row")
+            a(class="btn btn-danger mr-2", href="/users/" + user.id + "/delete") Delete
+            a(class="btn btn-success", href="/users/" + user.id) View
+  

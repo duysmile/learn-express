@@ -1,0 +1,8 @@
+extends ../layouts/common
+
+block main
+  a(href="/transactions") Back
+  each error in errors
+      .alert.alert-danger= error
+    
+  

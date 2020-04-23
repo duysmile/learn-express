@@ -1,0 +1,10 @@
+extends ../layouts/common
+
+block main
+  h2 Add book
+  form(action="/books/create", method="POST")
+    div(class="form-group")
+      input(class="form-control", type="text", name="title", placeholder="Title")
+    div(class="form-group")
+      input(class="form-control", type="text", name="description", placeholder="Description")
+    button(class="btn btn-primary") Add

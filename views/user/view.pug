@@ -1,0 +1,10 @@
+extends ../layouts/common
+
+block main
+  h2 View user
+  a(href="/users") Back
+  form(action="/users/" + user.id, method="POST")
+    div(class="form-group")
+      label Title: 
+      input(class="form-control", type="text", name="name", value=user.name)
+    button(class="btn btn-primary") Update

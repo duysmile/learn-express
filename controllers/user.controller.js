@@ -1,3 +1,4 @@
+const md5 = require('md5');
 const shortid = require('shortid');
 
 const {User} = require('../db');
@@ -23,9 +24,20 @@ exports.get = (req, res) => {
 
 exports.postCreate = (req, res) => {
   const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const existedUser = User.find({ email: email }).value();
+  if (existedUser) {
+    return res.render('user/create', {
+      errors: ['Email exists.'],
+      values: req.body,
+    });
+  }
   User.push({
     id: shortid.generate(),
     name,
+    email,
+    password: md5(password),
   }).write();
   return res.redirect('/users');
 };

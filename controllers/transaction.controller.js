@@ -3,7 +3,8 @@ const shortid = require('shortid');
 const {Transaction, User, Book} = require('../db');
 
 exports.index = (req, res) => {
-  let transactions = Transaction.value();
+  const userId = req.cookies.userId;
+  let transactions = Transaction.filter({userId: userId}).value();
   transactions = transactions.map(transaction => {
     const user = User.find({id: transaction.userId}).value();
     const book = Book.find({id: transaction.bookId}).value();

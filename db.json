@@ -19,11 +19,22 @@
   "users": [
     {
       "id": "RVrnerYlE",
-      "name": "duy"
+      "name": "duy",
+      "email": "duy210697@gmail.com",
+      "password": "4297f44b13955235245b2497399d7a93",
+      "isAdmin": true
     },
     {
       "id": "yCENSmSv_",
-      "name": "hang"
+      "name": "hang",
+      "email": "hangdethuong@gmail.com",
+      "password": "4297f44b13955235245b2497399d7a93"
+    },
+    {
+      "id": "lxDU5rTmf",
+      "name": "linn",
+      "email": "linn@gmail.com",
+      "password": "4297f44b13955235245b2497399d7a93"
     }
   ],
   "transactions": [
@@ -32,6 +43,11 @@
       "bookId": "NhzeZNEKG",
       "userId": "RVrnerYlE",
       "isComplete": true
+    },
+    {
+      "id": "aVkxxkad8",
+      "bookId": "L23CGm9-y",
+      "userId": "yCENSmSv_"
     }
   ]
 }

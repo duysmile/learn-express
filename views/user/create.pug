@@ -7,5 +7,9 @@ block main
       .alert.alert-danger= error
   form(action="/users/create", method="POST")
     div(class="form-group")
-      input(class="form-control", name="name", placeholder="Name")
+      input(class="form-control", name="name", placeholder="Name", value= values ? values.name : '')
+    div(class="form-group")
+      input(class="form-control", name="email", placeholder="Email", value= values ? values.email : '')
+    div(class="form-group")
+      input(type="password", class="form-control", name="password", placeholder="Password", value= values ? values.password : '')
     button(class="btn btn-primary") Create

@@ -1,10 +1,15 @@
-const md5 = require('md5');
+const bcrypt = require('bcrypt');
 const shortid = require('shortid');
 
 const {User} = require('../db');
 
 exports.index = (req, res) => {
-  const users = User.value();
+  const page = parseInt(req.query.page) || 1;
+  const perPage = 5;
+  const users = User
+    .drop((page - 1) * perPage)
+    .take(perPage)
+    .value();
   return res.render('user/list', {
     users,
   });
@@ -33,11 +38,12 @@ exports.postCreate = (req, res) => {
       values: req.body,
     });
   }
+  const hashedPassword = bcrypt.hashSync(password, 2);
   User.push({
     id: shortid.generate(),
     name,
     email,
-    password: md5(password),
+    password: hashedPassword,
   }).write();
   return res.redirect('/users');
 };

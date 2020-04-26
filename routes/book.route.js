@@ -4,7 +4,8 @@ const bookController = require("../controllers/book.controller");
 
 router.get("/create", bookController.create);
 
-router.get("/", bookController.index);
+router.get("/list", bookController.index);
+router.get("/", bookController.list);
 
 router.get("/:id/delete", bookController.delete);
 

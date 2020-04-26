@@ -24,16 +24,15 @@ app.set('views', './views');
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.cookie('cookies', 'hi');
   res.redirect('/auth/login');
 });
 
-app.use('/users', userRoute);
+app.use('/users', authMiddleware.requireAuth, userRoute);
 app.use('/books', bookRoute);
 app.use('/transactions', authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', authRoute);
 
 // listen for requests :)
-const listener = app.listen(process.env.PORT, () => {
+const listener = app.listen(3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });

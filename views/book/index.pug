@@ -1,13 +1,8 @@
 extends ../layouts/common
 
 block main
-  div.card
-  img.card-img-top(src="https://i.picsum.photos/id/1011/5472/3648.jpg", alt="Book Image")
-  div.card-body
-    h5.card-title Card title
-    p.card-text Some quick example text to build on the card title and make up the bulk of the card's content.
-    a.btn.btn-primary(href="#") Go somewhere
-
+  h2 List books
+  a(class="btn btn-primary mb-2", href="/books/create") Add new book
   table(class="table table-bordered")
     thead(class="thead-dark")
       tr

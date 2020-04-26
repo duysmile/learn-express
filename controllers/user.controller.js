@@ -119,17 +119,17 @@ exports.changeAvatar = (req, res) => {
 
 exports.postChangeAvatar = (req, res) => {
   const path = req.file.path;
-  cloudinary.uploader.upload(path, function(error, result) {
+  cloudinary.uploader.upload(path, function (error, result) {
     const userId = req.signedCookies.userId;
     const user = User.find({ id: userId }).write();
-  
+
     if (error) {
       return res.render('user/avatar', {
         errors: [error.message],
       });
     }
     const avatar = result.secure_url;
-    User.find({id: userId}).assign({avatar: avatar}).write();
+    User.find({ id: userId }).assign({ avatar: avatar }).write();
     return res.render("user/profile", {
       user: user,
     });

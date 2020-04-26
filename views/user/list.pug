@@ -17,4 +17,21 @@ block main
           th(scope="row")
             a(class="btn btn-danger mr-2", href="/users/" + user.id + "/delete") Delete
             a(class="btn btn-success", href="/users/" + user.id) View
+  nav(aria-label="pagination")
+    ul(class="pagination")
+      if hasPrevious
+        li(class="page-item")
+          a(class="page-link", href="/users?page=" + (currentPage - 1)) Previous
+      each page in pages
+          if page === currentPage
+            li(class="page-item active")
+              a(class="page-link", href="/users?page=" + page)= page
+          else
+            li(class="page-item")
+              a(class="page-link", href="/users?page=" + page)= page
+      
+      if (hasNext)
+        li(class="page-item")
+          a(class="page-link", href="/users?page=" + (currentPage + 1)) Next
+
   

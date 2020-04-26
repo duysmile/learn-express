@@ -22,4 +22,20 @@ block main
           th(scope="row")
             if (!transaction.isComplete)
               a(class="btn btn-success mr-2", href="/transactions/" + transaction.id + "/complete") Complete
-            a(class="btn btn-danger", href="/transactions/" + transaction.id + "/delete") Delete
+            a(class="btn btn-danger", href="/transactions/" + transaction.id + "/delete") Delete  
+  nav(aria-label="pagination")
+    ul(class="pagination")
+      if hasPrevious
+        li(class="page-item")
+          a(class="page-link", href="/transactions?page=" + (currentPage - 1)) Previous
+      each page in pages
+          if page === currentPage
+            li(class="page-item active")
+              a(class="page-link", href="/transactions?page=" + page)= page
+          else
+            li(class="page-item")
+              a(class="page-link", href="/transactions?page=" + page)= page
+      
+      if (hasNext)
+        li(class="page-item")
+          a(class="page-link", href="/transactions?page=" + (currentPage + 1)) Next

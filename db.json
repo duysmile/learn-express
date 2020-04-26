@@ -22,7 +22,8 @@
       "name": "duy",
       "email": "duy210697@gmail.com",
       "password": "$2b$04$wi3PEXyG83HHQJmwSNXm9ui8KmB9GkOI/p8DyPHSjmG7lo0enkKma",
-      "wrongLoginCount": 0
+      "wrongLoginCount": 0,
+      "avatar": "https://res.cloudinary.com/danang-university-of-technology/image/upload/v1587885125/ijq2lcwto5scg45tkd6j.jpg"
     },
     {
       "id": "9afdf643-20ae-461e-8044-a39560e7c1e9",

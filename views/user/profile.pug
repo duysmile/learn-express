@@ -5,7 +5,8 @@ block main
   a(href="/users") Back
   form(action="/users/profile", method="POST")
     div
-      img(class="rounded", src= user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
+      img(class="rounded", style="width: 100px", src= user.avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
+    a(href="/users/profile/avatar") Change avatar
     div(class="form-group")
       label Name: 
       input(class="form-control", type="text", name="name", value=user.name)

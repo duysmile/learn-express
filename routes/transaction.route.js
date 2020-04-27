@@ -4,6 +4,8 @@ const transactionController = require('../controllers/transaction.controller');
 
 router.get('/', transactionController.index);
 
+router.get('/add', transactionController.addFromCart);
+
 router.get('/create', transactionController.create);
 
 router.get('/:id/delete', transactionController.delete);

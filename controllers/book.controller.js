@@ -1,4 +1,5 @@
 const shortid = require('shortid');
+const cloudinary = require("cloudinary").v2;
 
 const { Book } = require('../db');
 
@@ -99,15 +100,28 @@ exports.get = (req, res) => {
 };
 
 exports.postCreate = (req, res) => {
-  const body = req.body;
-  const title = body.title;
-  const description = body.description;
-  Book.push({
-    id: shortid.generate(),
-    title,
-    description,
-  }).write();
-  return res.redirect('/books');
+  const path = req.file.path;
+  cloudinary.uploader.upload(path, function (error, result) {
+    const body = req.body;
+    const title = body.title;
+    const description = body.description;
+    
+    if (error) {
+      return res.render('book/create', {
+        errors: [error.message],
+        values: req.body,
+      });
+    }
+
+    const coverUrl = result.secure_url;
+    Book.push({
+      id: shortid.generate(),
+      coverUrl,
+      title,
+      description,
+    }).write();
+    return res.redirect('/books/list');
+  });
 };
 
 exports.postUpdate = (req, res) => {

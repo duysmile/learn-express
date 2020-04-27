@@ -56,5 +56,8 @@ exports.postLogin = (req, res, next) => {
   res.cookie("userId", user.id, {
     signed: true
   });
+  if (user.isAdmin) {
+    return res.redirect('/books/list');
+  }
   return res.redirect("/transactions");
 };

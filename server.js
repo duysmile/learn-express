@@ -8,13 +8,15 @@ const userRoute = require('./routes/user.route');
 const bookRoute =require('./routes/book.route');
 const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
-const countMiddleware = require('./middlewares/count.middleware');
+const cartRoute = require('./routes/cart.route');
+
 const authMiddleware = require('./middlewares/auth.middleware');
+const sessionMiddleware = require('./middlewares/session.middleware');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
-app.use(countMiddleware.count);
+app.use(sessionMiddleware);
 
 app.use(express.static('public'));
 
@@ -31,6 +33,7 @@ app.use('/users', authMiddleware.requireAuth, userRoute);
 app.use('/books', bookRoute);
 app.use('/transactions', authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', authRoute);
+app.use('/cart', cartRoute);
 
 // listen for requests :)
 const listener = app.listen(3000, () => {

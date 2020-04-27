@@ -2,9 +2,14 @@ extends ../layouts/common
 
 block main
   h2 Add book
-  form(action="/books/create", method="POST")
+   if errors
+    each error in errors
+      .alert.alert-danger= error
+  form(action="/books/create", method="POST", enctype="multipart/form-data")
     div(class="form-group")
-      input(class="form-control", type="text", name="title", placeholder="Title")
+      input(class="form-control", type="file", name="coverUrl")
     div(class="form-group")
-      input(class="form-control", type="text", name="description", placeholder="Description")
+      input(class="form-control", type="text", name="title", placeholder="Title", value= values ? values.title : '')
+    div(class="form-group")
+      input(class="form-control", type="text", name="description", placeholder="Description", value= values ? values.description : '')
     button(class="btn btn-primary") Add

@@ -4,6 +4,7 @@ block main
   h2 View book
   a(href="/books") Back
   form(action="/books/" + book.id, method="POST")
+    input(type="hidden", name="_csrf", value=csrfToken)
     div(class="form-group")
       label Title 
       input(class="form-control", type="text", name="title", value=book.title)

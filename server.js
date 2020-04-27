@@ -3,9 +3,10 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const cookieParser = require('cookie-parser');
+const csurf = require('csurf')
 
 const userRoute = require('./routes/user.route');
-const bookRoute =require('./routes/book.route');
+const bookRoute = require('./routes/book.route');
 const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
 const cartRoute = require('./routes/cart.route');
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(sessionMiddleware);
+app.use(csrf({ cookie: true }));
 
 app.use(express.static('public'));
 

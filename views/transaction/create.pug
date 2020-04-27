@@ -3,6 +3,7 @@ extends ../layouts/common
 block main
   h2 Add transaction
   form(action="/transactions/create", method="POST")
+    input(type="hidden", name="_csrf", value=csrfToken)
     div(class="form-group")
       label User 
       select(class="form-control", name="user")

@@ -6,6 +6,7 @@ block main
     each error in errors
       .alert.alert-danger= error
   form(action="/users/create", method="POST")
+   input(type="hidden", name="_csrf", value=csrfToken)
     div(class="form-group")
       input(class="form-control", name="name", placeholder="Name", value= values ? values.name : '')
     div(class="form-group")

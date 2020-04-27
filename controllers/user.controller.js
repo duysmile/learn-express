@@ -45,14 +45,17 @@ exports.index = (req, res) => {
 };
 
 exports.create = (req, res) => {
-  return res.render("user/create");
+  return res.render("user/create", {
+    csrfToken: req.csrfToken(),
+  });
 };
 
 exports.get = (req, res) => {
   const id = req.params.id;
   const user = User.find({ id }).value();
   return res.render("user/view", {
-    user
+    user,
+    csrfToken: req.csrfToken(),
   });
 };
 
@@ -96,7 +99,8 @@ exports.profile = (req, res) => {
   const userId = req.signedCookies.userId;
   const user = User.find({ id: userId }).value();
   return res.render("user/profile", {
-    user
+    user,
+    csrfToken: req.csrfToken(),
   });
 };
 
@@ -113,7 +117,8 @@ exports.changeAvatar = (req, res) => {
   const userId = req.signedCookies.userId;
   const user = User.find({ id: userId }).write();
   return res.render("user/avatar", {
-    avatar: user.avatar
+    avatar: user.avatar,
+    csrfToken: req.csrfToken(),
   });
 };
 

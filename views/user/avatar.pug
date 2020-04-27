@@ -4,6 +4,7 @@ block main
   h2 Change Avatar
   a(href="/user/profile") Back
   form(action="/users/profile/avatar", method="POST", enctype="multipart/form-data")
+    input(type="hidden", name="_csrf", value=csrfToken)
     div
       img(class="rounded", src= avatar || 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y')
     div(class="form-group")

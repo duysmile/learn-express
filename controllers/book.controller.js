@@ -4,7 +4,9 @@ const cloudinary = require("cloudinary").v2;
 const { Book } = require('../db');
 
 exports.create = (req, res) => {
-  return res.render('book/create');
+  return res.render('book/create', {
+    csrfToken: req.csrfToken(),
+  });
 };
 
 exports.index = (req, res) => {
@@ -96,6 +98,7 @@ exports.get = (req, res) => {
   const book = Book.find({ id }).value();
   return res.render('book/view', {
     book,
+    csrfToken: req.csrfToken(),
   });
 };
 

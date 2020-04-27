@@ -62,6 +62,7 @@ exports.create = (req, res) => {
   return res.render('transaction/create', {
     books,
     users,
+    csrfToken: req.csrfToken(),
   });
 };
 

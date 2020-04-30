@@ -16,6 +16,9 @@ const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
 const cartRoute = require('./routes/cart.route');
 
+const authApiRoute = require('./api/routes/auth.route');
+const transactionApiRoute = require('./api/routes/transaction.route');
+
 const authMiddleware = require('./middlewares/auth.middleware');
 const sessionMiddleware = require('./middlewares/session.middleware');
 
@@ -41,6 +44,9 @@ app.use('/books', bookRoute);
 app.use('/transactions', authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', authRoute);
 app.use('/cart', cartRoute);
+
+app.use('/api', authApiRoute);
+app.use('/api/transactions', transactionApiRoute);
 
 // listen for requests :)
 const listener = app.listen(3000, () => {

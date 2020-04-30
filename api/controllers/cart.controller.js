@@ -1,4 +1,4 @@
-const { Session, Book } = require('../models');
+const { Session, Book } = require('../../models');
 
 exports.addToCart = async (req, res) => {
   const sessionId = req.signedCookies.sessionId;

@@ -1,6 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 
-const { Book } = require('../models');
+const { Book } = require('../../models');
 
 exports.create = (req, res) => {
   return res.render('book/create', {

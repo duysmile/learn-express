@@ -26,7 +26,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(sessionMiddleware);
-app.use(csrf({ cookie: true }));
 
 app.use(express.static('public'));
 
@@ -39,9 +38,9 @@ app.get("/", (req, res) => {
   res.redirect('/auth/login');
 });
 
-app.use('/users', authMiddleware.requireAuth, userRoute);
-app.use('/books', bookRoute);
-app.use('/transactions', authMiddleware.requireAuth, transactionRoute);
+app.use('/users', csrf({ cookie: true }), authMiddleware.requireAuth, userRoute);
+app.use('/books', csrf({ cookie: true }), bookRoute);
+app.use('/transactions', csrf({ cookie: true }), authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', authRoute);
 app.use('/cart', cartRoute);
 

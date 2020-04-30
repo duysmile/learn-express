@@ -1,8 +1,7 @@
 const bcrypt = require("bcrypt");
-const shortid = require("shortid");
 const cloudinary = require("cloudinary").v2;
 
-const { User } = require("../models");
+const { User } = require("../../models");
 
 exports.index = async (req, res) => {
   const page = parseInt(req.query.page) || 1;

@@ -1,6 +1,6 @@
 const sgMail = require("@sendgrid/mail");
 const bcrypt = require("bcrypt");
-const { User } = require("../models");
+const { User } = require("../../models");
 
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;

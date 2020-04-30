@@ -4,14 +4,12 @@ const transactionController = require('../controllers/transaction.controller');
 
 router.get('/', transactionController.index);
 
-router.get('/add', transactionController.addFromCart);
+router.post('/add', transactionController.addFromCart);
 
-router.get('/create', transactionController.create);
+router.delete('/:id/', transactionController.delete);
 
-router.get('/:id/delete', transactionController.delete);
+router.post('/', transactionController.postCreate);
 
-router.post('/create', transactionController.postCreate);
-
-router.get('/:id/complete', transactionController.complete);
+router.put('/:id', transactionController.complete);
 
 module.exports = router;

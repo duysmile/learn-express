@@ -42,20 +42,12 @@ exports.index = async (req, res) => {
     });
 };
 
-exports.create = async (req, res) => {
-  const books = await Book.find();
-  const users = await User.find();
-  return res.render('transaction/create', {
-    books,
-    users,
-    csrfToken: req.csrfToken(),
-  });
-};
-
 exports.delete = async (req, res) => {
   const id = req.params.id;
   await Transaction.deleteOne({ _id: id });
-  return res.redirect('/transactions');
+  return res.json({
+    success: true,
+  });
 };
 
 exports.postCreate = async (req, res) => {
@@ -69,19 +61,23 @@ exports.postCreate = async (req, res) => {
     book,
     count: 1,
   });
-  return res.redirect('/transactions');
+  return res.json({
+    success: true,
+  });
 };
 
 exports.complete = async (req, res) => {
   const id = req.params.id;
   const transaction = await Transaction.findOne({ _id: id });
   if (!transaction) {
-    return res.render('transaction/error', {
+    return res.status(400).json({
       errors: ['Transaction id doesn\'t exist'],
     });
   }
   await Transaction.updateOne({ _id: id }, { isComplete: true });
-  return res.redirect('/transactions');
+  return res.json({
+    success: true,
+  });
 }
 
 exports.addFromCart = async (req, res) => {
@@ -105,5 +101,7 @@ exports.addFromCart = async (req, res) => {
 
   await Transaction.insertMany(listTransaction);
   await Session.updateOne({ _id: sessionId }, { cart: {} });
-  return res.redirect('/transactions');
+  return res.json({
+    success: true,
+  });
 }

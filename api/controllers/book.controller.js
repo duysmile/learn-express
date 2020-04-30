@@ -2,12 +2,6 @@ const cloudinary = require("cloudinary").v2;
 
 const { Book } = require('../../models');
 
-exports.create = (req, res) => {
-  return res.render('book/create', {
-    csrfToken: req.csrfToken(),
-  });
-};
-
 exports.index = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = 20;
@@ -38,7 +32,7 @@ exports.index = async (req, res) => {
   const books = await Book.find()
     .limit(perPage)
     .skip((page - 1) * perPage);
-  return res.render('book/index', {
+  return res.json({
     books,
     pages,
     currentPage: page,
@@ -77,7 +71,7 @@ exports.list = async (req, res) => {
   const books = await Book.find()
     .skip((page - 1) * perPage)
     .limit(perPage);
-  return res.render('book/list', {
+  return res.json({
     books,
     pages,
     currentPage: page,
@@ -89,15 +83,17 @@ exports.list = async (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   await Book.deleteOne({ _id: id });
-  return res.redirect('/books');
+  return res.json({
+    success: true,
+  });
 };
 
 exports.get = async (req, res) => {
   const id = req.params.id;
   const book = await Book.findOne({ _id: id });
-  return res.render('book/view', {
+  return res.json({
     book,
-    csrfToken: req.csrfToken(),
+    success: true,
   });
 };
 
@@ -109,9 +105,8 @@ exports.postCreate = (req, res) => {
     const description = body.description;
     
     if (error) {
-      return res.render('book/create', {
+      return res.status(400).json({
         errors: [error.message],
-        values: req.body,
       });
     }
 
@@ -121,7 +116,9 @@ exports.postCreate = (req, res) => {
       title,
       description,
     });
-    return res.redirect('/books/list');
+    return res.json({
+      success: true,
+    });
   });
 };
 
@@ -129,5 +126,7 @@ exports.postUpdate = async (req, res) => {
   const id = req.params.id;
   const title = req.body.title;
   await Book.updateOne({ _id: id }, { title });
-  return res.redirect('/books');
+  return res.json({
+    success: true,
+  });
 };

@@ -5,7 +5,9 @@ exports.addToCart = async (req, res) => {
   const bookId = req.params.id;
   const book = await Book.findOne({ _id: bookId });
   if (!sessionId || !book) {
-    return res.redirect('/books');
+    return res.status(400).json({
+      errors: ['Session or book not found'],
+    });
   }
 
   const session = await Session.findOne({ _id: sessionId });
@@ -15,5 +17,7 @@ exports.addToCart = async (req, res) => {
     .set('cart.' + bookId, count + 1)
     .save();
 
-  return res.redirect('/books');
+  return res.json({
+    success: true,
+  });
 }

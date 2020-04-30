@@ -16,14 +16,12 @@ router.get('/profile/avatar', userController.changeAvatar);
 
 router.post('/profile/avatar', upload.single('avatar'), userController.postChangeAvatar);
 
-router.get('/create', userController.create);
-
-router.get('/:id/delete', userController.delete);
+router.delete('/:id/delete', userController.delete);
 
 router.get('/:id', userController.get);
 
-router.post('/create', userMiddleware.postCreate, userController.postCreate);
+router.post('/', userMiddleware.postCreate, userController.postCreate);
 
-router.post('/:id', userController.postUpdate);
+router.put('/:id', userController.postUpdate);
 
 module.exports = router;

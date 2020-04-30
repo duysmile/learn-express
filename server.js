@@ -18,6 +18,8 @@ const cartRoute = require('./routes/cart.route');
 
 const authApiRoute = require('./api/routes/auth.route');
 const transactionApiRoute = require('./api/routes/transaction.route');
+const bookApiRoute = require('./api/routes/book.route');
+const cartApiRoute = require('./api/routes/cart.route');
 
 const authMiddleware = require('./middlewares/auth.middleware');
 const sessionMiddleware = require('./middlewares/session.middleware');
@@ -46,6 +48,8 @@ app.use('/cart', cartRoute);
 
 app.use('/api', authApiRoute);
 app.use('/api/transactions', transactionApiRoute);
+app.use('/api/books', bookApiRoute);
+app.use('/api/carts', cartApiRoute);
 
 // listen for requests :)
 const listener = app.listen(3000, () => {

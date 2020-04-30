@@ -1,20 +1,19 @@
-const { Session, Book } = require('../db');
+const { Session, Book } = require('../models');
 
-exports.addToCart = (req, res) => {
+exports.addToCart = async (req, res) => {
   const sessionId = req.signedCookies.sessionId;
   const bookId = req.params.id;
-  const book = Book.find({ id: bookId });
+  const book = await Book.findOne({ _id: bookId });
   if (!sessionId || !book) {
     return res.redirect('/books');
   }
 
-  const count = Session.find({id: sessionId})
-    .get('cart.' + bookId, 0)
-    .value();
+  const session = await Session.findOne({ _id: sessionId });
+  const count = session.cart ? (session.cart.get(bookId) || 0) : 0;
 
-  Session.find({id: sessionId})
-  .set('cart.' + bookId, count + 1)
-  .write();
+  await session
+    .set('cart.' + bookId, count + 1)
+    .save();
 
   return res.redirect('/books');
 }

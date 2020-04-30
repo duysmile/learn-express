@@ -1,13 +1,13 @@
 const shortid = require('shortid');
 
-const { Transaction, User, Book, Session } = require('../db');
+const { Transaction, User, Book, Session } = require('../models');
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const userId = req.signedCookies.userId;
 
   const perPage = 5;
-  const count = Transaction.value().length;
+  const count = await Transaction.countDocuments();
   const totalPages = Math.ceil(count / perPage);
   const maxPageSide = 2;
 
@@ -32,21 +32,10 @@ exports.index = (req, res) => {
     pages.push(i);
   }
 
-  let transactions = Transaction
-    .filter({ userId: userId })
-    .drop((page - 1) * perPage)
-    .take(perPage)
-    .value();
-  transactions = transactions.map(transaction => {
-    const user = User.find({ id: transaction.userId }).value();
-    const book = Book.find({ id: transaction.bookId }).value();
-    return {
-      book: book.title,
-      user: user.name,
-      isComplete: transaction.isComplete,
-      id: transaction.id,
-    }
-  });
+  const transactions = await Transaction
+    .find({ 'user._id': userId })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
   return res.render('transaction/list', {
     transactions,
     pages,
@@ -56,9 +45,9 @@ exports.index = (req, res) => {
   });
 };
 
-exports.create = (req, res) => {
-  const books = Book.value();
-  const users = User.value();
+exports.create = async (req, res) => {
+  const books = await Book.find();
+  const users = await User.find();
   return res.render('transaction/create', {
     books,
     users,
@@ -66,50 +55,58 @@ exports.create = (req, res) => {
   });
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-  Transaction.remove({ id }).write();
+  await Transaction.deleteOne({ _id: id });
   return res.redirect('/transactions');
 };
 
-exports.postCreate = (req, res) => {
+exports.postCreate = async (req, res) => {
   const bookId = req.body.book;
   const userId = req.body.user;
-  Transaction.push({
-    id: shortid.generate(),
-    bookId,
-    userId,
-  }).write();
+
+  const book = await Book.findOne({ _id: bookId });
+  const user = await User.findOne({ _id: userId });
+  await Transaction.create({
+    user,
+    book,
+    count: 1,
+  });
   return res.redirect('/transactions');
 };
 
-exports.complete = (req, res) => {
+exports.complete = async (req, res) => {
   const id = req.params.id;
-  const transaction = Transaction.find({ id }).value();
+  const transaction = await Transaction.findOne({ _id: id });
   if (!transaction) {
     return res.render('transaction/error', {
       errors: ['Transaction id doesn\'t exist'],
     });
   }
-  Transaction.find({ id }).assign({ isComplete: true }).write();
+  await Transaction.updateOne({ _id: id }, { isComplete: true });
   return res.redirect('/transactions');
 }
 
-exports.addFromCart = (req, res) => {
+exports.addFromCart = async (req, res) => {
   const userId = req.signedCookies.userId;
   const sessionId = req.signedCookies.sessionId;
 
-  const cart = Session.find({id: sessionId}).get('cart', {}).value();
-  Object.keys(cart).forEach(bookId => {
-    const id = shortid.generate();
-    const transaction = {
-      id,
-      userId,
-      bookId,
-      count: cart[bookId],
+  const user = await User.findOne({ _id: userId });
+  const session = await Session.findOne({ _id: sessionId }).lean();
+  const cart = session.cart || {};
+
+  const listBookId = Object.keys(cart);
+  const books = await Book.find({ _id: listBookId });
+
+  const listTransaction = books.map(book => {
+    return {
+      user,
+      book,
+      count: cart[book._id.toString()],
     };
-    Transaction.push(transaction).write();
   });
-  Session.find({id: sessionId}).set('cart', {}).write();
+
+  await Transaction.insertMany(listTransaction);
+  await Session.updateOne({ _id: sessionId }, { cart: {} });
   return res.redirect('/transactions');
 }

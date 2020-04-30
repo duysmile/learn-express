@@ -3,7 +3,12 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const cookieParser = require('cookie-parser');
-const csurf = require('csurf')
+const csrf = require('csurf');
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const userRoute = require('./routes/user.route');
 const bookRoute = require('./routes/book.route');

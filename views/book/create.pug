@@ -5,8 +5,7 @@ block main
    if errors
     each error in errors
       .alert.alert-danger= error
-  form(action="/books/create", method="POST", enctype="multipart/form-data")
-    input(type="hidden", name="_csrf", value=csrfToken)
+  form(action="/books/create?_csrf=" + csrfToken, method="POST", enctype="multipart/form-data")
     div(class="form-group")
       input(class="form-control", type="file", name="coverUrl")
     div(class="form-group")

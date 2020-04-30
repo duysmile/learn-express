@@ -2,12 +2,12 @@ const bcrypt = require("bcrypt");
 const shortid = require("shortid");
 const cloudinary = require("cloudinary").v2;
 
-const { User } = require("../db");
+const { User } = require("../models");
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = 5;
-  const count = User.value().length;
+  const count = await User.countDocuments();
   const totalPages = Math.ceil(count / perPage);
   const maxPageSide = 2;
   let begin = 0;
@@ -32,9 +32,9 @@ exports.index = (req, res) => {
     pages.push(i);
   }
 
-  const users = User.drop((page - 1) * perPage)
-    .take(perPage)
-    .value();
+  const users = await User.find()
+    .skip((page - 1) * perPage)
+    .limit(perPage);
   return res.render("user/list", {
     users,
     pages,
@@ -50,20 +50,20 @@ exports.create = (req, res) => {
   });
 };
 
-exports.get = (req, res) => {
+exports.get = async (req, res) => {
   const id = req.params.id;
-  const user = User.find({ id }).value();
+  const user = await User.findOne({ _id: id });
   return res.render("user/view", {
     user,
     csrfToken: req.csrfToken(),
   });
 };
 
-exports.postCreate = (req, res) => {
+exports.postCreate = async (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
-  const existedUser = User.find({ email: email }).value();
+  const existedUser = await User.findOne({ email: email });
   if (existedUser) {
     return res.render("user/create", {
       errors: ["Email exists."],
@@ -71,51 +71,46 @@ exports.postCreate = (req, res) => {
     });
   }
   const hashedPassword = bcrypt.hashSync(password, 2);
-  User.push({
-    id: shortid.generate(),
+  await User.create({
     name,
     email,
     password: hashedPassword
-  }).write();
+  });
   return res.redirect("/users");
 };
 
-exports.postUpdate = (req, res) => {
+exports.postUpdate = async (req, res) => {
   const id = req.params.id;
   const name = req.body.name;
-  User.find({ id })
-    .assign({ name })
-    .write();
+  await User.updateOne({ _id: id }, { name });
   return res.redirect("/users");
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-  User.remove({ id }).write();
+  await User.delete({ _id: id });
   return res.redirect("/users");
 };
 
-exports.profile = (req, res) => {
+exports.profile = async (req, res) => {
   const userId = req.signedCookies.userId;
-  const user = User.find({ id: userId }).value();
+  const user = await User.findOne({ _id: userId });
   return res.render("user/profile", {
     user,
     csrfToken: req.csrfToken(),
   });
 };
 
-exports.updateProfile = (req, res) => {
+exports.updateProfile = async (req, res) => {
   const id = req.signedCookies.userId;
   const name = req.body.name;
-  User.find({ id })
-    .assign({ name })
-    .write();
+  await User.updateOne({ _id: id }, { name });
   return res.redirect("/users");
 };
 
 exports.changeAvatar = (req, res) => {
   const userId = req.signedCookies.userId;
-  const user = User.find({ id: userId }).write();
+  const user = User.findOne({ _id: userId });
   return res.render("user/avatar", {
     avatar: user.avatar,
     csrfToken: req.csrfToken(),
@@ -124,9 +119,8 @@ exports.changeAvatar = (req, res) => {
 
 exports.postChangeAvatar = (req, res) => {
   const path = req.file.path;
-  cloudinary.uploader.upload(path, function (error, result) {
+  cloudinary.uploader.upload(path, async (error, result) => {
     const userId = req.signedCookies.userId;
-    const user = User.find({ id: userId }).write();
 
     if (error) {
       return res.render('user/avatar', {
@@ -134,7 +128,7 @@ exports.postChangeAvatar = (req, res) => {
       });
     }
     const avatar = result.secure_url;
-    User.find({ id: userId }).assign({ avatar: avatar }).write();
+    await User.updateOne({ _id: userId }, { avatar: avatar });
     return res.render("user/profile", {
       user: user,
     });

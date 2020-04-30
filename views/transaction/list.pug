@@ -16,8 +16,8 @@ block main
       each transaction in transactions
         tr
           th(scope="row")= transaction.id
-          th(scope="row")= transaction.book
-          th(scope="row")= transaction.user
+          th(scope="row")= transaction.book.title
+          th(scope="row")= transaction.user.name
           th(scope="row")= transaction.isComplete ? 'Completed' : 'Incompleted'
           th(scope="row")
             if (!transaction.isComplete)

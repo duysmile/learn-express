@@ -1,17 +1,19 @@
 const sgMail = require("@sendgrid/mail");
 const bcrypt = require("bcrypt");
-const { User } = require("../db");
+const { User } = require("../models");
 
 exports.getLogin = (req, res, next) => {
-  return res.render("auth/login");
+  return res.render("auth/login", {
+    csrfToken: req.csrfToken(),
+  });
 };
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
   const errors = [];
-  const user = User.find({ email: email }).value();
+  const user = await User.findOne({ email: email });
   if (!user) {
     errors.push("User does not exist.");
     return res.render("auth/login", {
@@ -40,9 +42,7 @@ exports.postLogin = (req, res, next) => {
     });
   }
   if (!bcrypt.compareSync(password, user.password)) {
-    User.find({ email: email })
-      .assign({ wrongLoginCount: wrongLoginCount + 1 })
-      .write();
+    await User.updateOne({ email: email }, { wrongLoginCount: wrongLoginCount + 1 });
     errors.push("Wrong password.");
     return res.render("auth/login", {
       errors: errors,
@@ -50,9 +50,7 @@ exports.postLogin = (req, res, next) => {
     });
   }
 
-  User.find({ email: email })
-    .assign({ wrongLoginCount: 0 })
-    .write();
+  await User.updateOne({ email: email }, { wrongLoginCount: 0 });
   res.cookie("userId", user.id, {
     signed: true
   });

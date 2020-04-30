@@ -1,7 +1,6 @@
-const shortid = require('shortid');
 const cloudinary = require("cloudinary").v2;
 
-const { Book } = require('../db');
+const { Book } = require('../models');
 
 exports.create = (req, res) => {
   return res.render('book/create', {
@@ -9,10 +8,10 @@ exports.create = (req, res) => {
   });
 };
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = 20;
-  const count = Book.value().length;
+  const count = await Book.countDocuments();
   const totalPages = Math.ceil(count / perPage);
   const maxPageSide = 2;
   let begin = 0;
@@ -36,9 +35,9 @@ exports.index = (req, res) => {
   for (let i = begin; i < end; i++) {
     pages.push(i);
   }
-  const books = Book.drop((page - 1) * perPage)
-    .take(perPage)
-    .value();
+  const books = await Book.find()
+    .limit(perPage)
+    .skip((page - 1) * perPage);
   return res.render('book/index', {
     books,
     pages,
@@ -48,10 +47,10 @@ exports.index = (req, res) => {
   });
 };
 
-exports.list = (req, res) => {
+exports.list = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const perPage = 20;
-  const count = Book.value().length;
+  const count = await Book.countDocuments();
   const totalPages = Math.ceil(count / perPage);
   const maxPageSide = 2;
   let begin = 0;
@@ -75,9 +74,9 @@ exports.list = (req, res) => {
   for (let i = begin; i < end; i++) {
     pages.push(i);
   }
-  const books = Book.drop((page - 1) * perPage)
-    .take(perPage)
-    .value();
+  const books = await Book.find()
+    .skip((page - 1) * perPage)
+    .limit(perPage);
   return res.render('book/list', {
     books,
     pages,
@@ -87,15 +86,15 @@ exports.list = (req, res) => {
   });
 };
 
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
   const id = req.params.id;
-  Book.remove({ id }).write();
+  await Book.deleteOne({ _id: id });
   return res.redirect('/books');
 };
 
-exports.get = (req, res) => {
+exports.get = async (req, res) => {
   const id = req.params.id;
-  const book = Book.find({ id }).value();
+  const book = await Book.findOne({ _id: id });
   return res.render('book/view', {
     book,
     csrfToken: req.csrfToken(),
@@ -104,7 +103,7 @@ exports.get = (req, res) => {
 
 exports.postCreate = (req, res) => {
   const path = req.file.path;
-  cloudinary.uploader.upload(path, function (error, result) {
+  cloudinary.uploader.upload(path, async (error, result) => {
     const body = req.body;
     const title = body.title;
     const description = body.description;
@@ -117,19 +116,18 @@ exports.postCreate = (req, res) => {
     }
 
     const coverUrl = result.secure_url;
-    Book.push({
-      id: shortid.generate(),
+    await Book.create({
       coverUrl,
       title,
       description,
-    }).write();
+    });
     return res.redirect('/books/list');
   });
 };
 
-exports.postUpdate = (req, res) => {
+exports.postUpdate = async (req, res) => {
   const id = req.params.id;
   const title = req.body.title;
-  Book.find({ id }).assign({ title }).write();
+  await Book.updateOne({ _id: id }, { title });
   return res.redirect('/books');
 };

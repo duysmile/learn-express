@@ -15,7 +15,7 @@ exports.index = async (req, res) => {
 
   if (count < maxPageSide * 2 + 1) {
     begin = 1;
-    end = count;
+    end = 2;
   } else if (page - maxPageSide <= 0) {
     begin = 1;
     end = begin + maxPageSide * 2 + 1;

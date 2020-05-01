@@ -7,7 +7,7 @@ const csrf = require('csurf');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_CONNECTION, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: false,
 });
 
 const userRoute = require('./routes/user.route');
@@ -27,6 +27,9 @@ const sessionMiddleware = require('./middlewares/session.middleware');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(csrf({
+  cookie: true,
+}));
 app.use(sessionMiddleware);
 
 app.use(express.static('public'));

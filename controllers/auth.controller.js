@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models");
 
 exports.getLogin = (req, res, next) => {
-  var a;
-  a.b();
   return res.render("auth/login", {
     csrfToken: req.csrfToken(),
   });

@@ -1,4 +1,4 @@
-const { Session } = require('../models');
+const { Session } = require('../../models');
 
 module.exports = async (req, res, next) => {
   const sessionId = req.signedCookies.sessionId;

@@ -51,6 +51,11 @@ app.use('/api/transactions', transactionApiRoute);
 app.use('/api/books', bookApiRoute);
 app.use('/api/carts', cartApiRoute);
 
+app.use(function (err, req, res, next) {
+  console.error(err);
+  res.status(500).render('common/error');
+});
+
 // listen for requests :)
 const listener = app.listen(3000, () => {
   console.log("Your app is listening on port " + listener.address().port);

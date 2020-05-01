@@ -57,6 +57,6 @@ app.use(function (err, req, res, next) {
 });
 
 // listen for requests :)
-const listener = app.listen(3000, () => {
+const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });

@@ -5,10 +5,10 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGO_CONNECTION, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: false,
-// });
+mongoose.connect(process.env.MONGO_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: false,
+});
 
 const userRoute = require('./routes/user.route');
 const bookRoute = require('./routes/book.route');

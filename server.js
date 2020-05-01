@@ -49,7 +49,7 @@ app.use('/books', csrf({ cookie: true }), bookRoute);
 app.use('/transactions', csrf({ cookie: true }), authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', csrf({ cookie: true }), authRoute);
 app.use('/cart', cartRoute);
-app.use('/shops', csrf({ cookie: true }), authMiddleware.requireAuth, shopRoute);
+app.use('/shops', csrf({ cookie: true }), shopRoute);
 
 app.use('/api', authApiRoute);
 app.use('/api/transactions', transactionApiRoute);

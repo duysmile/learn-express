@@ -40,10 +40,10 @@ app.set('views', './views');
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.redirect('/auth/login');
+  res.redirect('/user/create');
 });
 
-app.use('/users', csrf({ cookie: true }), authMiddleware.requireAuth, userRoute);
+app.use('/users', csrf({ cookie: true }), userRoute);
 app.use('/books', csrf({ cookie: true }), bookRoute);
 app.use('/transactions', csrf({ cookie: true }), authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', csrf({ cookie: true }), authRoute);

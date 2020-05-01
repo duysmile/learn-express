@@ -40,7 +40,7 @@ app.set('views', './views');
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.redirect('/user/create');
+  res.redirect('/users/create');
 });
 
 app.use('/users', csrf({ cookie: true }), userRoute);

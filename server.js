@@ -6,7 +6,8 @@ const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_CONNECTION, {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 const userRoute = require('./routes/user.route');

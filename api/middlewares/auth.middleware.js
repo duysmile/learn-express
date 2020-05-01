@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User } = require("../../models");
 
 exports.requireAuth = async (req, res, next) => {
   const userId = req.signedCookies.userId;

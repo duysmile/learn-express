@@ -8,6 +8,7 @@ const userSchema = new Schema({
   avatar: String,
   wrongLoginCount: Number,
   isAdmin: Boolean,
+  shop: String,
 });
 
 const User = mongoose.model('User', userSchema, 'users');

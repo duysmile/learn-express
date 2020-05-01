@@ -15,6 +15,7 @@ const bookRoute = require('./routes/book.route');
 const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
 const cartRoute = require('./routes/cart.route');
+const shopRoute = require('./routes/shop.route');
 
 const authApiRoute = require('./api/routes/auth.route');
 const transactionApiRoute = require('./api/routes/transaction.route');
@@ -48,6 +49,7 @@ app.use('/books', csrf({ cookie: true }), bookRoute);
 app.use('/transactions', csrf({ cookie: true }), authMiddleware.requireAuth, transactionRoute);
 app.use('/auth', csrf({ cookie: true }), authRoute);
 app.use('/cart', cartRoute);
+app.use('/shops', csrf({ cookie: true }), authMiddleware.requireAuth, shopRoute);
 
 app.use('/api', authApiRoute);
 app.use('/api/transactions', transactionApiRoute);

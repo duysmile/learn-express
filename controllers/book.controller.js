@@ -101,13 +101,17 @@ exports.get = async (req, res) => {
   });
 };
 
-exports.postCreate = (req, res) => {
+exports.postCreate = (req, res, next) => {
   const path = req.file.path;
+  const user = req.user;
+  if (!user.isAdmin && !user.shop) {
+    return next(new Error('User is invalid to create book'));
+  }
   cloudinary.uploader.upload(path, async (error, result) => {
     const body = req.body;
     const title = body.title;
     const description = body.description;
-    
+
     if (error) {
       return res.render('book/create', {
         errors: [error.message],
@@ -116,12 +120,25 @@ exports.postCreate = (req, res) => {
     }
 
     const coverUrl = result.secure_url;
-    await Book.create({
-      coverUrl,
-      title,
-      description,
-    });
-    return res.redirect('/books/list');
+    if (user.isAdmin) {
+      await Book.create({
+        coverUrl,
+        title,
+        description,
+      });
+      
+      return res.redirect('/books/list');
+    } else {
+      const shop = user.shop;
+      await Book.create({
+        coverUrl,
+        title,
+        description,
+        shop,
+      });
+      
+      return res.redirect('/shops/' + user.shop + '/books');
+    }
   });
 };
 

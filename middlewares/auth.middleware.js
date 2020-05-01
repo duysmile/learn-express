@@ -14,6 +14,7 @@ exports.requireAuth = async (req, res, next) => {
     res.locals.isAdmin = true;
   }
   res.locals.user = user;
+  req.user = user;
 
   next();
 };

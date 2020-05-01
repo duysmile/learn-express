@@ -17,9 +17,9 @@ exports.index = async (req, res) => {
   let begin = 0;
   let end = 0;
 
-  if (count < maxPageSide * 2 + 1) {
+  if (totalPages < maxPageSide * 2 + 1) {
     begin = 1;
-    end = count;
+    end = totalPages + 1;
   } else if (page - maxPageSide <= 0) {
     begin = 1;
     end = begin + maxPageSide * 2 + 1;
@@ -56,9 +56,9 @@ exports.list = async (req, res) => {
   let begin = 0;
   let end = 0;
 
-  if (count < maxPageSide * 2 + 1) {
+  if (totalPages < maxPageSide * 2 + 1) {
     begin = 1;
-    end = count;
+    end = totalPages + 1;
   } else if (page - maxPageSide <= 0) {
     begin = 1;
     end = begin + maxPageSide * 2 + 1;

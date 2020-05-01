@@ -15,15 +15,15 @@ block main
     ul(class="pagination")
       if hasPrevious
         li(class="page-item")
-          a(class="page-link", href="/books?page=" + (currentPage - 1)) Previous
+          a(class="page-link", href="?page=" + (currentPage - 1)) Previous
       each page in pages
           if page === currentPage
             li(class="page-item active")
-              a(class="page-link", href="/books?page=" + page)= page
+              a(class="page-link", href="?page=" + page)= page
           else
             li(class="page-item")
-              a(class="page-link", href="/books?page=" + page)= page
+              a(class="page-link", href="?page=" + page)= page
       
       if (hasNext)
         li(class="page-item")
-          a(class="page-link", href="/books?page=" + (currentPage + 1)) Next
+          a(class="page-link", href="?page=" + (currentPage + 1)) Next
